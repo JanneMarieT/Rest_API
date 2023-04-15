@@ -23,7 +23,7 @@ All the data is stored in a MySQL database called "TheGarden" (check out the .en
 
 # Application Installation and Usage Instructions
 
-- First install the neccessary dependency with the command - npm install
+- First install the neccessary dependency with the command -- npm install
 
 ## Additional Libraries/Packages
 - __It will install these dependencies:__ 
