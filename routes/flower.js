@@ -82,7 +82,6 @@ router.post('/', jsonParser, async function(req, res, next) {
 });
 
 //Change flower item
-//need to be able to change it to nothing that exist for this user
 router.put('/:id', jsonParser, async function(req, res, next) {
   const { name, ColourId } = req.body;
   if (name == null) {
@@ -100,7 +99,6 @@ router.put('/:id', jsonParser, async function(req, res, next) {
   try {
     // Verify token and get user ID
     const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
-    console.log(decodedToken.id)
 
     //Check if the flower exist in db
     var flower = await flowerService.getFlower(req.params.id);
@@ -108,11 +106,16 @@ router.put('/:id', jsonParser, async function(req, res, next) {
        return res.jsend.fail({"id": "this flower does not exist in database"});
     }
     if(flower) {
-    // Find flower by ID and update it
-    await flowerService.update(req.params.id, name, ColourId); 
-    return res.status(200).json({ success: true, message: 'Flower updated successfully.' });
-    }
 
+      //Check if the flower belongs to the user
+      if(flower.UserId != decodedToken.id ) {
+        return res.jsend.fail({"User": "You cant change a Flower that doesent belong to you!"});
+      } else {
+      // Find flower by ID and update it
+      await flowerService.update(req.params.id, name, ColourId); 
+      return res.status(200).json({ success: true, message: 'Flower updated successfully.' });
+      }
+    }
   } catch (err) {
     res.status(401).json({ success: false, message: 'Invalid token.' }); 
   }
@@ -134,14 +137,11 @@ router.delete('/', jsonParser, async function(req, res, next) {
     //Check id
     if(req.body.id !== undefined){ //undefined instead of null 
       let id = req.body.id
-      if(id == null) {
-        return res.jsend.fail({"data":"id is required."});
-      }
       var flower = await flowerService.getFlower(id);
       if(flower == null) {
         return res.jsend.fail({"id": "No such flower-id in the database"});
       }
-      // Check if to-do item belongs to user
+      // Check if flower item belongs to user
       if (flower.UserId === decodedToken.id) {
         await flowerService.delete(id);
         return res.jsend.success({"result": "You deleted a flower"});
@@ -152,14 +152,11 @@ router.delete('/', jsonParser, async function(req, res, next) {
     //Check name
     } else if(req.body.name !== undefined){ 
       let name = req.body.name
-      if(name == null) {
-        return res.jsend.fail({"data":"name is required."});
-      }
       var flower = await flowerService.getFlowerName(name);
       if(flower == null) {
         return res.jsend.fail({"name": "No such flower in the database"});
       }
-      // Check if flower belongs to user -->what if its multiple flowers of same name to diferent users...
+      // Check if flower belongs to user 
       if (flower.UserId === decodedToken.id) {
         await flowerService.delete(flower.id);
         return res.jsend.success({"result": "You deleted a flower"});

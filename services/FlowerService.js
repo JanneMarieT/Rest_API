@@ -4,6 +4,7 @@ class FlowerService {
         this.Flower = db.Flower;
     }
 
+    //GET
     async getOne(UserId) {
         return this.Flower.findAll({
             where: {UserId: UserId}
@@ -12,38 +13,23 @@ class FlowerService {
         });
     }
 
-    async getUser(UserId) {
-        return this.Flower.findAll({
-            where: {UserId: UserId}
-        }).catch(function (err) {
-            console.log(err)
-        });
-    }
+    //POST
+    async create(Name, ColourId, UserId) {
+        try {
+        const model = this.Flower;
+                const flower = await model.create({
+                    name: Name,
+                    ColourId: ColourId,
+                    UserId: UserId
+                });
+                return flower;
+            } catch (err) {
+                console.log(err)
+                throw err;
+            }
+        }
 
-    async getFlower(id) {
-        return this.Flower.findOne({
-            where: {id: id}
-        }).catch(function (err) {
-            console.log(err)
-        });
-    }
-
-    async CheckFlowerId(ColourId) {
-        return this.Flower.findOne({
-            where: {ColourId: ColourId}
-        }).catch(function (err) {
-            console.log(err)
-        });
-    }
-
-    async getFlowerName(name) {
-        return this.Flower.findOne({
-            where: {name: name}
-        }).catch(function (err) {
-            console.log(err)
-        });
-    }
-
+    //PUT
     async update(id, name, ColourId) {
         try {
           const flower = await this.Flower.findOne({
@@ -68,23 +54,26 @@ class FlowerService {
             throw err;
           }
         }
+        
+    //PUT & DELETE
+    async getFlower(id) {
+        return this.Flower.findOne({
+            where: {id: id}
+        }).catch(function (err) {
+            console.log(err)
+        });
+    }
 
-    async create(Name, ColourId, UserId) {
-        try {
-        const model = this.Flower;
-                const flower = await model.create({
-                    name: Name,
-                    ColourId: ColourId,
-                    UserId: UserId
-                });
-                return flower;
-            } catch (err) {
-                console.log(err)
-                throw err;
-            }
-        }
-    
+    //DELETE
+    async getFlowerName(name) {
+        return this.Flower.findOne({
+            where: {name: name}
+        }).catch(function (err) {
+            console.log(err)
+        });
+    }
 
+    //DELETE
     async delete(id) {
         return this.Flower.destroy({
             where: {id: id}
@@ -92,9 +81,18 @@ class FlowerService {
             console.log(err)
         });
     }
-       
-}
 
+    //DELETE - colour
+    async CheckFlowerId(ColourId) {
+        return this.Flower.findOne({
+            where: {ColourId: ColourId}
+        }).catch(function (err) {
+            console.log(err)
+        });
+    }
+  
+    
+}
 
 
 

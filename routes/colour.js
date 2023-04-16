@@ -25,7 +25,6 @@ router.get('/', function(req, res, next) {
         const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET );
         console.log(decodedToken.id)
         colourService.getOne().then((colour) => {
-            console.log(colour)
             res.jsend.success({"result": "ColourList:", data: {Colour: colour || []}});
         });
 
@@ -35,7 +34,7 @@ router.get('/', function(req, res, next) {
 
 })
 
-// POST a new colour - if it exixt you cant make it again!
+// POST a new colour 
 router.post('/', jsonParser, function(req, res, next) {
     const Name = req.body.name;
     if (Name == null) {
@@ -50,7 +49,6 @@ router.post('/', jsonParser, function(req, res, next) {
     try {
       // Verify token and get user ID
       const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
-      console.log(decodedToken.id)
       // Create new colour
       colourService.create(Name);
       res.jsend.success({"result": "You made a new Colour", User: decodedToken.id, data: {Name: Name}}); //should it also return the new id?
@@ -61,7 +59,7 @@ router.post('/', jsonParser, function(req, res, next) {
 
 });
 
-//Change Category item
+//Change Colour item
 router.put('/:id', jsonParser, async function(req, res, next) { 
   if (req.body.name == null) {
     return res.jsend.fail({"name": "Name is required."});
@@ -77,13 +75,13 @@ router.put('/:id', jsonParser, async function(req, res, next) {
       const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
       console.log(decodedToken.id)
 
-      //Check if the category exist
+      //Check if the colour exist
       var colour = await colourService.getColour(req.params.id);
       if(!colour) {
          return res.jsend.fail({"ColourId": "this colour does not exist"});
       }
       if(colour) {
-      // Find todo by ID and update it
+      // Find colour by ID and update it
       await colourService.update(req.params.id, req.body.name); 
       return res.status(200).json({ success: true, message: 'Colour updated successfully.' });
       }

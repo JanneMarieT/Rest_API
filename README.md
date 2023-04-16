@@ -1,9 +1,9 @@
-# Flower application
+# TheGarden REST API application
 
 ![Banner](/public/images/banner.jpg)
 
 
-This is a project where i have created the REST API endpoints for a "Flower" Application, 
+This is a project where i have created the REST API endpoints for "TheGarden" Application, 
 which allows users to create, view, update and delete Flowers.
 
 Say your in the garden with other users and you are picking flowers and sorting them into the database.
@@ -149,6 +149,7 @@ v18.12.1
 # POSTMAN Documentation link
 
 Postman documentation link where i tested all the API endpoints:
+https://documenter.getpostman.com/view/26263171/2s93XyTiH3
 
 
 ## Contributing

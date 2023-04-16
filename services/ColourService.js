@@ -4,38 +4,30 @@ class ColourService {
         this.Colour = db.Colour
     }
 
+    //GET
     async getOne() { 
         return this.Colour.findAll({
         }).catch(function (err) {
             console.log(err)
         });
     }
-/*
-    async getUser(UserId) {
-        return this.colour.findAll({
-            where: {UserId: UserId}
-        }).catch(function (err) {
-            console.log(err)
-        });
-    }
-*/
-    async getColour(id) {
-        return this.Colour.findOne({
-            where: {id: id}
-        }).catch(function (err) {
-            console.log(err)
-        });
+
+    //POST
+    async create(Name) { 
+        try {
+        const model = this.Colour;
+                const newColour = await model.create({
+                    name: Name
+                });
+                return newColour;
+            } catch (err) {
+                console.log('Error updating category:', err)
+                throw err;
+        }
     }
 
-    async getColourName(name) { 
-        return this.Colour.findOne({ //find all?
-            where: {name: name}
-        }).catch(function (err) {
-            console.log(err)
-        });
-    }
-
-    async update(id, name) { //works
+    //PUT
+    async update(id, name) { 
         try {
           const colour = await this.Colour.findOne({
             where: {id: id}
@@ -59,18 +51,25 @@ class ColourService {
           }
         }
 
-    async create(Name) { //works
-        const model = this.Colour;
-                const newColour = await model.create({
-                    name: Name
-                });
-                return newColour;
-            }catch (err) {
-                console.log(err)
-                throw err;
-            }
-        
+    //DELETE & PUT + POST in flower
+    async getColour(id) {
+        return this.Colour.findOne({
+            where: {id: id}
+        }).catch(function (err) {
+            console.log(err)
+        });
+    }
 
+    //DELETE
+    async getColourName(name) { 
+        return this.Colour.findOne({ 
+            where: {name: name}
+        }).catch(function (err) {
+            console.log(err)
+        });
+    }
+
+    //DELETE
     async delete(id) {
         return this.Colour.destroy({
             where: {id: id}
@@ -80,8 +79,6 @@ class ColourService {
     }
        
 }
-
-
 
 
 module.exports = ColourService;
